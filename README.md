@@ -14,4 +14,4 @@ Please see [APRSdroid](http://aprsdroid.org/) for the master application.
 
 This code is (C) [Georg Lukas](http://op-co.de/).
 
-Optimizations for Samsung Galaxy S4 by Andreas Pachler, OE8APR
+Optimizations for Samsung Galaxy S4 by [Andreas Pachler, OE8APR](http://socialhams.net/oe8apr)
