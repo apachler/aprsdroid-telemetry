@@ -1,17 +1,16 @@
-# APRSdroid API Example
-
-This is a minimal example project to demonstrate the use of APRSdroid's
-`SEND_PACKET` API, introduced in version 1.2.4.
+# APRSdroid Telemetry for Samsung Galaxy S4
 
 This app uses on-screen buttons to launch the APRSdroid service, and to
 send APRS packets via `SEND_PACKET`. The packets contain telemetry data
-obtained from the local Android sensors:
+obtained from the local Android sensors (optimized for Samsung Galaxy S4):
 
- * Light sensor
- * Pressure
  * Temperature
- * Proximity
+ * Humidity
+ * Pressure
+ * Accelerometer
+ * Gyroscope
 
 Please see [APRSdroid](http://aprsdroid.org/) for the master application.
 
 This code is (C) [Georg Lukas](http://op-co.de/).
+Optimizations for Samsung Galaxy S4 by Andreas Pachler, OE8APR
