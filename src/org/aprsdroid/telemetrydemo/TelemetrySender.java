@@ -16,7 +16,9 @@ public class TelemetrySender extends Activity implements SensorEventListener
 {
 	// constants for sensor configuration
 	// values from http://developer.android.com/reference/android/hardware/Sensor.html
-	static final int SENSOR_TYPES[] = { TYPE_AMBIENT_TEMPERATURE, TYPE_RELATIVE_HUMIDITY, TYPE_PRESSURE, TYPE_ACCELEROMETER, TYPE_GYROSCOPE };
+	static final int SENSOR_TYPES[] = {
+		TYPE_AMBIENT_TEMPERATURE, TYPE_RELATIVE_HUMIDITY, TYPE_PRESSURE, TYPE_ACCELEROMETER, TYPE_GYROSCOPE
+	};
 	static final String SENSOR_NAMES[] = {
 		"Temperature", "Humidity", "Pressure", "Accelerometer", "Gyroscope"
 	};
