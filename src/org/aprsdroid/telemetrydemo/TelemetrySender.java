@@ -16,12 +16,12 @@ public class TelemetrySender extends Activity implements SensorEventListener
 {
 	// constants for sensor configuration
 	// values from http://developer.android.com/reference/android/hardware/Sensor.html
-	static final int SENSOR_TYPES[] = { 5, 6, 7, 8 };
+	static final int SENSOR_TYPES[] = { TYPE_AMBIENT_TEMPERATURE, TYPE_RELATIVE_HUMIDITY, TYPE_PRESSURE, TYPE_ACCELEROMETER, TYPE_GYROSCOPE };
 	static final String SENSOR_NAMES[] = {
-		"Light", "Pressure", "Temp", "Prox"
+		"Temperature", "Humidity", "Pressure", "Accelerometer", "Gyroscope"
 	};
 	static final String SENSOR_UNITS[] = {
-		"Lux", "hPa", "deg.C", "cm"
+		"°C", "%", "hPa", "m/s^2", ""
 	};
 
 	// the sensors and values are kept in two arrays to allow asynchronous sending
@@ -70,7 +70,7 @@ public class TelemetrySender extends Activity implements SensorEventListener
 		StringBuilder sb_units = new StringBuilder("UNIT.");
 		StringBuilder sb_eqns = new StringBuilder("EQNS.");
 		for (int id = 0; id < SENSOR_TYPES.length; id++)
-	       		if (sensors[id] != null) {
+	       	if (sensors[id] != null) {
 				sb_names.append(SENSOR_NAMES[id]);
 				sb_names.append(",");
 
