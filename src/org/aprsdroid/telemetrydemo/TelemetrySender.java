@@ -1,35 +1,51 @@
-package org.aprsdroid.telemetrydemo;
+package org.aprsdroid.telemetrysender;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class TelemetrySender extends Activity implements SensorEventListener
 {
-	// constants for sensor configuration
-	// values from http://developer.android.com/reference/android/hardware/Sensor.html
+	// constants for sensor configuration - http://developer.android.com/reference/android/hardware/Sensor.html
+	// APRS telemetry specification only support 5 analogue channels but we can display more inside the textview!!
+	// maximal length of channel names are 6, 6, 5, 5, 4
 	static final int SENSOR_TYPES[] = {
-		TYPE_AMBIENT_TEMPERATURE, TYPE_RELATIVE_HUMIDITY, TYPE_PRESSURE, TYPE_ACCELEROMETER, TYPE_GYROSCOPE
+		TYPE_LINEAR_ACCELERATION, TYPE_AMBIENT_TEMPERATURE, TYPE_RELATIVE_HUMIDITY, TYPE_PRESSURE, TYPE_GRAVITY, TYPE_GYROSCOPE, TYPE_MAGNETIC_FIELD
 	};
 	static final String SENSOR_NAMES[] = {
-		"Temperature", "Humidity", "Pressure", "Accelerometer", "Gyroscope"
+		"Laccel", "Atemp", "RH", "Press", "Grav", "Gyro", "Magfield"
 	};
 	static final String SENSOR_UNITS[] = {
-		"°C", "%", "hPa", "m/s^2", ""
+		"m/s^2", "deg.C", "%rh", "hPa", "m/s^2", "rad/s", "uT"
 	};
 
 	// the sensors and values are kept in two arrays to allow asynchronous sending
 	Sensor sensors[];
 	float values[];
 	int seq_no = 0;
+	int sensor_axis = 2; // 0=x, 1=y, 2=z
+	
+	// alarm manager
+	final static private long ONE_SECOND = 1000;
+	final static private long SEND_INTERVAL = ONE_SECOND * 60 * 3;
+	PendingIntent pi;
+	BroadcastReceiver br;
+	AlarmManager am;
 
 	// UI elements
 	TextView mInfoText = null;
@@ -46,6 +62,9 @@ public class TelemetrySender extends Activity implements SensorEventListener
 
 		sensors = new Sensor[SENSOR_TYPES.length];
 		values = new float[SENSOR_TYPES.length];
+		
+		// setup alarm manager for periodic sending of telemetry data
+		setupAM();
 	}
 
 	@Override
@@ -60,6 +79,29 @@ public class TelemetrySender extends Activity implements SensorEventListener
 		unregisterSensors();
 	}
 
+	@Override
+	protected void onDestroy() {
+		am.cancel(pi);
+		unregisterReceiver(br);
+		unregisterSensors();
+		super.onDestroy();
+	}
+	
+	private void setupAM() {
+		br = new BroadcastReceiver() {
+            @Override
+			public void onReceive(Context c, Intent i) {
+				onSendParams(View view);
+				onSendValues(View view);
+			}
+        };
+		
+		registerReceiver(br, new IntentFilter("org.aprsdroid.telemetrysender"));
+        pi = PendingIntent.getBroadcast(this, 0, new Intent("org.aprsdroid.telemetrysender"), 0);
+        am = (AlarmManager)(this.getSystemService(Context.ALARM_SERVICE));
+		am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + SEND_INTERVAL, pi);
+	}
+
 	// button handlers
 	public void onStartService(View view) {
 		Intent i = new Intent("org.aprsdroid.app.SERVICE");
@@ -71,7 +113,9 @@ public class TelemetrySender extends Activity implements SensorEventListener
 		StringBuilder sb_names = new StringBuilder("PARM.");
 		StringBuilder sb_units = new StringBuilder("UNIT.");
 		StringBuilder sb_eqns = new StringBuilder("EQNS.");
-		for (int id = 0; id < SENSOR_TYPES.length; id++)
+		
+		// APRS telemetry specification only support 5 analogue channels!!
+		for (int id = 0; id < 5; id++) {
 	       	if (sensors[id] != null) {
 				sb_names.append(SENSOR_NAMES[id]);
 				sb_names.append(",");
@@ -84,6 +128,7 @@ public class TelemetrySender extends Activity implements SensorEventListener
 				sb_eqns.append(scale);
 				sb_eqns.append(",0,");
 			}
+		}
 
 		sendPacket(callssid + sb_names.toString());
 		sendPacket(callssid + sb_units.toString());
@@ -93,7 +138,9 @@ public class TelemetrySender extends Activity implements SensorEventListener
 	public void onSendValues(View view) {
 		StringBuilder sb = new StringBuilder(String.format("T#%03d,", seq_no++));
 		int count = 0;
-		for (int id = 0; id < SENSOR_TYPES.length; id++) {
+		
+		// APRS telemetry specification only support 5 analogue channels!!
+		for (int id = 0; id < 5; id++) {
 			if (sensors[id] != null) {
 				int value = (int)(values[id] * 255 / sensors[id].getMaximumRange());
 				sb.append(String.format("%03d", value));
@@ -105,6 +152,7 @@ public class TelemetrySender extends Activity implements SensorEventListener
 			sb.append("000,");
 			count++;
 		}
+		
 		sb.append("00000000");
 		sendPacket(sb.toString());
 	}
@@ -116,7 +164,12 @@ public class TelemetrySender extends Activity implements SensorEventListener
 	public void onSensorChanged(SensorEvent event) {
 		for (int id = 0; id < SENSOR_TYPES.length; id++)
 			if (sensors[id] == event.sensor) {
-				values[id] = event.values[0];
+				// we want to use a specific axis for sensors with coordinate system
+				if (event.values.length > 1) {
+					values[id] = event.values[sensor_axis];
+				} else {
+					values[id] = event.values[0];
+				}
 				displayValues();
 			}
 	}
@@ -159,5 +212,4 @@ public class TelemetrySender extends Activity implements SensorEventListener
 				sm.unregisterListener(this, sensors[id]);
 		}
 	}
-
 }
