@@ -1,8 +1,9 @@
-# APRSdroid Telemetry for Samsung Galaxy S4
+# APRSdroid TelemetrySender for Samsung Galaxy S4
 
-This app uses on-screen buttons to launch the APRSdroid service, and to
-send APRS packets via `SEND_PACKET`. The packets contain telemetry data
-obtained from the local Android sensors (optimized for Samsung Galaxy S4):
+This app uses on-screen buttons to launch the APRSdroid service and to
+send APRS telemetry packets via `SEND_PACKET`. It also sends telemetry
+packets on a defined interval. The packets contain telemetry data obtained
+from the local Android sensors (optimized for Samsung Galaxy S4):
 
  * Temperature
  * Humidity
