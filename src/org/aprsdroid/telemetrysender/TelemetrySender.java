@@ -36,9 +36,11 @@ public class TelemetrySender extends Activity implements SensorEventListener
 
 	// the sensors and values are kept in two arrays to allow asynchronous sending
 	Sensor sensors[];
-	float values[];
+	float values[][];
 	int seq_no = 0;
-	int sensor_axis = 2; // 0=x, 1=y, 2=z
+
+    // select which sensor axis we want to send over APRS for sensors with coordinate system (0=x, 1=y, 2=z)
+	int sensor_axis = 2;
 	
 	// alarm manager
 	final static private long ONE_SECOND = 1000;
@@ -61,8 +63,8 @@ public class TelemetrySender extends Activity implements SensorEventListener
 		mCallSsid = (EditText)findViewById(R.id.callssid);
 
 		sensors = new Sensor[SENSOR_TYPES.length];
-		values = new float[SENSOR_TYPES.length];
-		
+		values = new float[SENSOR_TYPES.length][3];
+
 		// setup alarm manager for periodic sending of telemetry data
 		setupAM();
 	}
@@ -142,7 +144,11 @@ public class TelemetrySender extends Activity implements SensorEventListener
 		// APRS telemetry specification only support 5 analogue channels!!
 		for (int id = 0; id < 5; id++) {
 			if (sensors[id] != null) {
-				int value = (int)(values[id] * 255 / sensors[id].getMaximumRange());
+				// we want to send just a specific axis value for sensors with coordinate system
+                if (values[id].isArray())
+				    int value = (int)(values[id][sensoraxis] * 255 / sensors[id].getMaximumRange());
+                else
+				    int value = (int)(values[id] * 255 / sensors[id].getMaximumRange());
 				sb.append(String.format("%03d", value));
 				sb.append(",");
 				count++;
@@ -164,12 +170,8 @@ public class TelemetrySender extends Activity implements SensorEventListener
 	public void onSensorChanged(SensorEvent event) {
 		for (int id = 0; id < SENSOR_TYPES.length; id++)
 			if (sensors[id] == event.sensor) {
-				// we want to use a specific axis for sensors with coordinate system
-				if (event.values.length > 1) {
-					values[id] = event.values[sensor_axis];
-				} else {
-					values[id] = event.values[0];
-				}
+                for (int value = 0; value < event.values.length; value++)
+    				values[id][value] = event.values[value];
 				displayValues();
 			}
 	}
@@ -188,10 +190,16 @@ public class TelemetrySender extends Activity implements SensorEventListener
 		StringBuilder sb = new StringBuilder();
 		for (int id = 0; id < SENSOR_TYPES.length; id++)
 			if (sensors[id] != null) {
-				sb.append(sensors[id].getName());
-				sb.append(": ");
-				sb.append(values[id]);
-				sb.append("\n");
+   				sb.append(sensors[id].getName());
+   				sb.append(": ");
+                for (int value = 0; value < values[id].length; value++) {
+                    if (values[id][value] != null) {
+                        sb.append(values[id][value]);
+                        if (value < values[id].length - 1)
+                            sb.append(", ");
+                    }
+                }
+   				sb.append("\n");
 			}
 		mInfoText.setText(sb.toString());
 	}
