@@ -127,7 +127,7 @@ public class TelemetrySender extends Activity implements SensorEventListener
                     values[id][value] = 0.0f;
 			}
 
-        displayValues();
+        doDisplayValues();
 	}
 
 	// helper methods
@@ -195,20 +195,20 @@ public class TelemetrySender extends Activity implements SensorEventListener
 		startService(i);
 	}
 
-	public void displayValues() {
+	public void doDisplayValues() {
 		StringBuilder sb = new StringBuilder();
 		for (int id = 0; id < SENSOR_TYPES.length; id++)
 			if (sensors[id] != null) {
    				sb.append(sensors[id].getName());
    				sb.append(": ");
-/*                for (int value = 0; value < values[id].length; value++) {
+                for (int value = 0; value < values[id].length; value++) {
                     if (values[id][value] != 0.0f) {
-*/                        sb.append(values[id][0]);
-/*                        if (values[id][0+1] != 0.0f)
+                        if (value > 0)
                             sb.append(", ");
+                        sb.append(values[id][value]);
                     }
                 }
-*/   				sb.append("\n");
+   				sb.append("\n");
 			}
 		mInfoText.setText(sb.toString());
 	}

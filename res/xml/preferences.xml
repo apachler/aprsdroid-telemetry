@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+	    android:title="@string/p__aprs">
+            
+        <de.duenndns.EditTextPreferenceWithValue
+            android:key="callsign"
+            android:inputType="textCapCharacters"
+		    android:digits="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		    android:title="@string/p_callsign_nossid"
+		    android:summary="@string/p_callsign_summary"
+		    android:hint="@string/p_callsign_nossid"
+		    android:dialogTitle="@string/p_callsign_entry" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/p__position">
+
+        <PreferenceScreen
+            android:title="@string/p_privacy"
+	        android:summary="@string/p_privacy_summary">
+
+            <PreferenceCategory
+    	        android:title="@string/p_privacy">
+
+                <CheckBoxPreference
+                    android:key="priv_altitude"
+    	           	android:title="@string/p_priv_altitude"
+    		        android:summary="@string/p_priv_altitude_summary"
+    		        android:defaultValue="true"
+    		    />
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+</PreferenceScreen>
