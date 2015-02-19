@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/action_pref"
+		android:title="@string/menu_pref"
+		android:alphabeticShortcut="p"
+		android:icon="@android:drawable/ic_menu_preferences"
+        android:onClick="onClickActionbarPreferences"
+        android:showAsAction="ifRoom" />
+	<item android:id="@+id/action_about"
+		android:title="@string/menu_about"
+		android:alphabeticShortcut="a"
+		android:icon="@android:drawable/ic_menu_info_details"
+        android:actionLayout="@layout/about"
+        android:showAsAction="never"/>
+</menu>

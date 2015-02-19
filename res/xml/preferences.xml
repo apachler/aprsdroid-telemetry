@@ -1,38 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-	    android:title="@string/p__aprs">
-            
-        <de.duenndns.EditTextPreferenceWithValue
-            android:key="callsign"
-            android:inputType="textCapCharacters"
-		    android:digits="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		    android:title="@string/p_callsign_nossid"
-		    android:summary="@string/p_callsign_summary"
-		    android:hint="@string/p_callsign_nossid"
-		    android:dialogTitle="@string/p_callsign_entry" />
+        android:key="pref_interval_settings"
+        android:title="@string/pref_interval_settings">
+
+        <CheckBoxPreference
+            android:key="pref_interval_perform_sending"
+            android:title="@string/pref_interval_perform_sending"
+            android:summary="@string/pref_interval_perform_sending_sum"
+            android:defaultValue="true"
+        />
+        <ListPreference
+            android:key="pref_interval_send_interval"
+            android:title="@string/pref_interval_send_interval"
+            android:summary="@string/pref_interval_send_interval_sum"
+            android:defaultValue="1000000"
+            android:entries="@array/pref_interval_send_interval"
+            android:entryValues="@array/pref_interval_send_interval_values"
+            android:dependency="pref_interval_perform_sending"
+        />
     </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/p__position">
-
-        <PreferenceScreen
-            android:title="@string/p_privacy"
-	        android:summary="@string/p_privacy_summary">
-
-            <PreferenceCategory
-    	        android:title="@string/p_privacy">
-
-                <CheckBoxPreference
-                    android:key="priv_altitude"
-    	           	android:title="@string/p_priv_altitude"
-    		        android:summary="@string/p_priv_altitude_summary"
-    		        android:defaultValue="true"
-    		    />
-            </PreferenceCategory>
-        </PreferenceScreen>
-    </PreferenceCategory>
-
 </PreferenceScreen>
