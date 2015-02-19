@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="fill_parent" >
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textSize="20sp"
+			android:text="@string/about_title"
+			android:layout_marginBottom="7sp" />
+		<TextView
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:autoLink="web"
+			android:text="@string/about_copyright"
+			android:layout_marginBottom="7sp" />
+		<TextView
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:autoLink="web"
+			android:text="@string/about_gpl"
+			android:layout_marginBottom="10sp" />
+		<TextView
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:textStyle="bold"
+			android:text="@string/about_thanks" />
+		<TextView
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/about_thanks_0" />
+		<TextView
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/about_thanks_1" />
+	</LinearLayout>
+</ScrollView>
