@@ -14,7 +14,7 @@
             android:key="pref_interval_send_interval"
             android:title="@string/pref_interval_send_interval"
             android:summary="@string/pref_interval_send_interval_sum"
-            android:defaultValue="1000000"
+            android:defaultValue="600000"
             android:entries="@array/pref_interval_send_interval"
             android:entryValues="@array/pref_interval_send_interval_values"
             android:dependency="pref_interval_perform_sending"

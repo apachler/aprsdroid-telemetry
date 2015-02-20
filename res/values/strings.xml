@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TelemetrySender</string>
+    <string name="title_showpreferencesactivity">Preferences</string>
+    <string name="title_showaboutactivity">About</string>
 
     <!-- options menu -->
     <string name="menu_pref">Preferences</string>
@@ -15,7 +17,7 @@
     <string name="pref_interval_send_interval_10000">Every 10 seconds (for testing only)</string>
     <string name="pref_interval_send_interval_60000">Every minute</string>
     <string name="pref_interval_send_interval_300000">Every 5 minutes</string>
-    <string name="pref_interval_send_interval_1000000">Every 10 minutes</string>
+    <string name="pref_interval_send_interval_600000">Every 10 minutes</string>
 
     <!-- about dialog -->
     <string name="about_title">About APRSdroid TelemetrySender</string>

@@ -8,14 +8,39 @@
     <uses-sdk android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
-    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
-        <activity android:name="TelemetrySender"
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
+        android:name="org.aprsdroid.telemetrysender.TelemetrySender">
+        <receiver android:name="org.aprsdroid.telemetrysender.AlarmReceiver">
+            <intent-filter>
+                <action android:name="org.aprsdroid.telemetrysender.UPDATE_VALUES" />
+                <action android:name="org.aprsdroid.telemetrysender.PERIODIC_SENDING" />
+            </intent-filter>
+        </receiver>
+        <activity android:name="org.aprsdroid.telemetrysender.MainActivity"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="org.aprsdroid.telemetrysender.ShowPreferencesActivity"
+            android:label="@string/title_showpreferencesactivity"
+            android:parentActivityName="org.aprsdroid.telemetrysender.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.aprsdroid.telemetrysender.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.aprsdroid.telemetrysender.ShowAboutActivity"
+            android:label="@string/title_showaboutactivity"
+            android:parentActivityName="org.aprsdroid.telemetrysender.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.aprsdroid.telemetrysender.MainActivity" />
         </activity>
     </application>
 </manifest>

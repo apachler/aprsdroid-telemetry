@@ -4,13 +4,13 @@
         <item name="10000">@string/pref_interval_send_interval_10000</item>
         <item name="60000">@string/pref_interval_send_interval_60000</item>
         <item name="300000">@string/pref_interval_send_interval_300000</item>
-        <item name="1000000">@string/pref_interval_send_interval_1000000</item>
+        <item name="600000">@string/pref_interval_send_interval_600000</item>
     </string-array>
 
     <string-array name="pref_interval_send_interval_values">
         <item name="10000">10000</item>
         <item name="60000">60000</item>
         <item name="300000">300000</item>
-        <item name="1000000">1000000</item>
+        <item name="600000">600000</item>
     </string-array>
 </resources>

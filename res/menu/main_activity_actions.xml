@@ -9,6 +9,6 @@
 		android:title="@string/menu_about"
 		android:alphabeticShortcut="a"
 		android:icon="@android:drawable/ic_menu_info_details"
-        android:actionLayout="@layout/about"
+        android:onClick="onClickActionbarAbout"
         android:showAsAction="never"/>
 </menu>
