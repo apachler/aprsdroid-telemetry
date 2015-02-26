@@ -5,16 +5,20 @@
       android:versionName="1.0.0_oe8apr"
       android:installLocation="auto">
 
-    <uses-sdk android:minSdkVersion="11"
+    <uses-sdk android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
         android:name="org.aprsdroid.telemetrysender.TelemetrySender">
+        <service
+            android:name="org.aprsdroid.telemetrysender.SensorListenerService"
+            android:exported="false"/>
+
         <receiver android:name="org.aprsdroid.telemetrysender.AlarmReceiver">
             <intent-filter>
-                <action android:name="org.aprsdroid.telemetrysender.UPDATE_VALUES" />
+                <action android:name="org.aprsdroid.telemetrysender.UPDATE_DISPLAY" />
                 <action android:name="org.aprsdroid.telemetrysender.PERIODIC_SENDING" />
             </intent-filter>
         </receiver>
@@ -42,5 +46,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.aprsdroid.telemetrysender.MainActivity" />
         </activity>
+        <activity android:name=".SensorActivity" />
     </application>
 </manifest>

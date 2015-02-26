@@ -8,7 +8,7 @@
             android:key="pref_interval_perform_sending"
             android:title="@string/pref_interval_perform_sending"
             android:summary="@string/pref_interval_perform_sending_sum"
-            android:defaultValue="true"
+            android:defaultValue="false"
         />
         <ListPreference
             android:key="pref_interval_send_interval"

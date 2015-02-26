@@ -8,5 +8,5 @@ public class TelemetrySender extends Application {
         super.onCreate();
     }
 
-    MainActivity mainActivity;
+    public static MainActivity mainActivity;
 }
