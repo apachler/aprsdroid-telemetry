@@ -25,16 +25,38 @@ public class MainActivity extends Activity {
      */
 
     // constants for sensor configuration - http://developer.android.com/reference/android/hardware/Sensor.html
+    /*
+     *  SENSORTYPE                          NR                      UNIT            VALUES
+     *  --------------------------------------------------------------------------------------------
+     *  TYPE_ACCELEROMETER                   1                      m/s^2           3
+     *  TYPE_MAGNETIC_FIELD                  2                      µT              3
+     *  TYPE_ORIENTATION                     3  (deprecated)        deg.            3
+     *  TYPE_GYROSCOPE                       4                      rad/s           3
+     *  TYPE_LIGHT                           5                      lx              1
+     *  TYPE_PRESSURE                        6                      hPa/mbar        1
+     *  TYPE_TEMPERATURE                     7  (deprecated)        deg.C           1
+     *  TYPE_PROXIMITY                       8                      cm              1
+     *  TYPE_GRAVITY                         9                      m/s^2           3
+     *  TYPE_LINEAR_ACCELERATION            10                      m/s^2           3
+     *  TYPE_ROTATION_VECTOR                11                                      4
+     *  TYPE_RELATIVE_HUMIDITY              12                      %               1
+     *  TYPE_AMBIENT_TEMPERATURE            13                      deg.C           1
+     *  TYPE_MAGNETIC_FIELD_UNCALIBRATED    14                      uT              6
+     *  TYPE_GAME_ROTATION_VECTOR           15                                      3
+     *  TYPE_GYROSCOPE_UNCALIBRATED         16                      rad/s           6
+     *  TYPE_SIGNIFICANT_MOTION             17
+     *  TYPE_STEP_DETECTOR                  18
+     *  TYPE_STEP_COUNTER                   19                      Steps           1
+     *  TYPE_GEOMAGNETIC_ROTATION_VECTOR    20                                      3
+     *  TYPE_HEART_RATE                     21
+     */
     // APRS telemetry specification only support 5 analogue channels but we can display more inside the textview!!
     // maximal length of channel names are 6, 6, 5, 5, 4
-/*    static final int SENSOR_TYPES[] = {
-            Sensor.TYPE_LINEAR_ACCELERATION, Sensor.TYPE_AMBIENT_TEMPERATURE, Sensor.TYPE_RELATIVE_HUMIDITY, Sensor.TYPE_PRESSURE, Sensor.TYPE_GRAVITY, Sensor.TYPE_GYROSCOPE, Sensor.TYPE_MAGNETIC_FIELD
-    };*/
     static final String SENSOR_NAMES[] = {
-            "Laccel", "Atemp", "RH", "Press", "Grav", "Gyro", "Mfield"
+            "Accel", "Mfield", "Orient", "Gyro", "Light", "Press", "Temp", "Prox", "Grav", "Laccel", "RotV", "RH", "Atemp", "MfielU", "GRotV", "GyroU", "SigM", "StepD", "StepC", "GMRotV", "HeartR"
     };
     static final String SENSOR_UNITS[] = {
-            "m/s^2", "deg.C", "%rh", "hPa", "m/s^2", "rad/s", "uT"
+            "m/s^2", "uT", "deg.", "rad/s", "lx", "hPa", "deg.C", "cm", "m/s^2", "m/s^2", "", "%", "deg.C", "uT", "", "rad/s", "", "", "Steps", "", ""
     };
 
     // interval definitions
@@ -83,9 +105,12 @@ public class MainActivity extends Activity {
 
         // sensor service
         sensorServiceIntent = new Intent(this, SensorListenerService.class);
+        startService(sensorServiceIntent);
+        registerReceiver(sensorServiceReceiver, new IntentFilter(SensorListenerService.BROADCAST_ACTION));
 
         // alarm manager
         alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        doStartAlarm();
 
         // main layout
         setContentView(R.layout.main);
@@ -99,21 +124,20 @@ public class MainActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        startService(sensorServiceIntent);
-        registerReceiver(sensorServiceReceiver, new IntentFilter(SensorListenerService.BROADCAST_ACTION));
-        doStartAlarm();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(sensorServiceReceiver);
-        stopService(sensorServiceIntent);
+//        unregisterReceiver(sensorServiceReceiver);
+//        stopService(sensorServiceIntent);
     }
 
     @Override
     protected void onDestroy() {
         doCancelAlarm();
+        unregisterReceiver(sensorServiceReceiver);
+        stopService(sensorServiceIntent);
         super.onDestroy();
     }
 
@@ -125,6 +149,8 @@ public class MainActivity extends Activity {
     private BroadcastReceiver sensorServiceReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+        Log.d("SensorListenerService", intent.getAction());
+
         SensorsObject s = SensorsObject.getSingletonObject();
         sensors = s.getSensors();
         values = s.getValues();
@@ -219,39 +245,54 @@ public class MainActivity extends Activity {
     }
 
     public void doSendParams() {
+        int sensor_count = 0;
         StringBuilder sb_names = new StringBuilder("PARM.");
         StringBuilder sb_units = new StringBuilder("UNIT.");
         StringBuilder sb_eqns = new StringBuilder("EQNS.");
 
-        // APRS telemetry specification only support 5 analogue channels!!
-        for (int id = 0; id < 5; id++) {
-            if (sensors[id] != null) {
-                sb_names.append(SENSOR_NAMES[id]);
+        for (Sensor sensor: sensors) {
+            int sensor_type = sensor.getType();
+            // is that sensor activated through preferences?
+            if (sharedPrefs.getBoolean("pref_sensor_sensor_type_" + sensor_type, false)) {
+                sb_names.append(SENSOR_NAMES[sensor_type]);
                 sb_names.append(",");
 
-                sb_units.append(SENSOR_UNITS[id]);
+                sb_units.append(SENSOR_UNITS[sensor_type]);
                 sb_units.append(",");
 
                 sb_eqns.append("0,");
-                float scale = sensors[id].getMaximumRange() / 255;
+                float scale = sensor.getMaximumRange() / 255;
                 sb_eqns.append(scale);
                 sb_eqns.append(",0,");
+
+                sensor_count++;
+            }
+
+            // APRS telemetry specification only support 5 analogue channels!!
+            if (sensor_count >= 4) {
+                break;
             }
         }
+
+        StringBuilder sb_bits = new StringBuilder("BITS.");
+        sb_bits.append("00000000,");
+        sb_bits.append(sharedPrefs.getString("pref_aprs_project_name", "APRSdroid TelemetrySender").trim().substring(0, 23));
 
         doSendPacket(sb_names.toString());
         doSendPacket(sb_units.toString());
         doSendPacket(sb_eqns.toString());
+        doSendPacket(sb_bits.toString());
     }
 
     public void doSendValues() {
         StringBuilder sb = new StringBuilder(String.format("T#%03d,", seq_no++));
-        int count = 0;
+        int sensor_count = 0;
 
-        // APRS telemetry specification only support 5 analogue channels!!
-        for (int id = 0; id < 5; id++) {
-            if (sensors[id] != null) {
-                // we want to send just a specific axis value for sensors with coordinate system
+        for (int id = 0; id < sensors.length; id++) {
+            int sensor_type = sensors[id].getType();
+            // is that sensor activated through preferences?
+            if (sharedPrefs.getBoolean("pref_sensor_sensor_type_" + sensor_type, false)) {
+                // we want to send a specific axis value for sensors with coordinate system
                 int value;
                 if (values[id][sensor_axis] != 0.0f) {
                     value = (int)(values[id][sensor_axis] * 255 / sensors[id].getMaximumRange());
@@ -260,12 +301,18 @@ public class MainActivity extends Activity {
                 }
                 sb.append(String.format("%03d", value));
                 sb.append(",");
-                count++;
+
+                sensor_count++;
+            }
+
+            // APRS telemetry specification only support 5 analogue channels!!
+            if (sensor_count >= 4) {
+                break;
             }
         }
-        while (count < 5) {
+        while (sensor_count < 5) {
             sb.append("000,");
-            count++;
+            sensor_count++;
         }
 
         sb.append("00000000");
@@ -277,7 +324,7 @@ public class MainActivity extends Activity {
 
         if (packet.endsWith(","))
             packet = packet.substring(0, packet.length() - 1);
-        Log.d("SENSOR", "TX >>> " + packet);
+        Log.d("SendPacket", "TX >>> " + packet);
         i.putExtra("data", packet);
 
         startService(i);

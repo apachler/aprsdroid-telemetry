@@ -4,27 +4,38 @@
     <string name="title_showpreferencesactivity">Preferences</string>
     <string name="title_showaboutactivity">About</string>
 
+    <!-- main screen -->
+    <string name="main_window_text">APRSdroid TelemetrySender\nObtaining sensor data, please wait ...</string>
+    <string name="main_button_aprsdroid">Start APRSdroid</string>
+    <string name="main_button_send_parameters">Send Parameters</string>
+    <string name="main_button_send_values">Send Values</string>
+
     <!-- options menu -->
     <string name="menu_pref">Preferences</string>
     <string name="menu_about">About</string>
 
     <!-- preferences -->
-    <string name="pref_interval_settings">Interval settings</string>
-    <string name="pref_interval_perform_sending">Enable sending</string>
-    <string name="pref_interval_perform_sending_sum">Enable or disable sending of telemetry data</string>
-    <string name="pref_interval_send_interval">Send interval</string>
-    <string name="pref_interval_send_interval_sum">Define how often data will be sent</string>
-    <string name="pref_interval_send_interval_10000">Every 10 seconds (for testing only)</string>
-    <string name="pref_interval_send_interval_60000">Every minute</string>
-    <string name="pref_interval_send_interval_300000">Every 5 minutes</string>
-    <string name="pref_interval_send_interval_600000">Every 10 minutes</string>
+    <string name="pref_aprs_settings">APRS</string>
+    <string name="pref_aprs_settings_sum">Define your APRS settings</string>
+    <string name="pref_aprs_perform_sending">Enable sending</string>
+    <string name="pref_aprs_perform_sending_sum">Enable or disable sending of APRS telemetry data</string>
+    <string name="pref_aprs_send_interval">Send interval</string>
+    <string name="pref_aprs_send_interval_sum">Define how often data will be sent</string>
+    <string name="pref_aprs_send_interval_10000">Every 10 seconds (for testing purpose only)</string>
+    <string name="pref_aprs_send_interval_60000">Every minute</string>
+    <string name="pref_aprs_send_interval_300000">Every 5 minutes</string>
+    <string name="pref_aprs_send_interval_600000">Every 10 minutes</string>
+    <string name="pref_aprs_project_name">Project name</string>
+    <string name="pref_aprs_project_name_sum">The name of the project associated with the telemetry station</string>
+    <string name="pref_sensor_settings">Sensors</string>
+    <string name="pref_sensor_settings_sum">Define what sensors you want to use for APRS telemetry</string>
 
     <!-- about dialog -->
     <string name="about_title">About APRSdroid TelemetrySender</string>
-    <string name="about_copyright">Copyright © Andreas Pachler (OE8APR)\n
+    <string name="about_copyright">APRSdroid and TelemetrySender base code is © Georg Lukas (DO1GL)\n
+        Functional extensions by Andreas Pachler (OE8APR)\n
     	http://socialhams.net/oe8apr\n
         \n
-        APRSdroid © Georg Lukas (DO1GL) - http://aprsdroid.org\n
         APRS® is a registered trademark of Bob Bruninga (WB4APR)
     </string>
     <string name="about_gpl">This program is free software; you can redistribute it and/or
@@ -44,6 +55,6 @@
     	http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
     </string>
     <string name="about_thanks">Thanks to:</string>
-    <string name="about_thanks_0">My YL ♥♥♥</string>
-    <string name="about_thanks_1">Georg Lukas, DO1GL: for APRSdroid and telemetry base code</string>
+    <string name="about_thanks_0">My YL Chrissi ♥♥♥</string>
+    <string name="about_thanks_1">My dad, OE6POD, for my interest in technics and amateur radio</string>
 </resources>

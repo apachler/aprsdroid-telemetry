@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="pref_aprs_settings"
+        android:title="@string/pref_aprs_settings">
+
+        <CheckBoxPreference
+            android:key="pref_aprs_perform_sending"
+            android:title="@string/pref_aprs_perform_sending"
+            android:summary="@string/pref_aprs_perform_sending_sum"
+            android:defaultValue="false"/>
+        <ListPreference
+            android:key="pref_aprs_send_interval"
+            android:title="@string/pref_aprs_send_interval"
+            android:summary="@string/pref_aprs_send_interval_sum"
+            android:defaultValue="600000"
+            android:entries="@array/pref_aprs_send_interval"
+            android:entryValues="@array/pref_aprs_send_interval_values"
+            android:dependency="pref_aprs_perform_sending"/>
+        <EditTextPreference
+            android:key="pref_aprs_project_name"
+            android:title="@string/pref_aprs_project_name"
+            android:summary="@string/pref_aprs_project_name_sum"
+            android:dialogTitle="@string/pref_aprs_project_name"
+            android:defaultValue="APRSdroid TelemetrySender"/>
+    </PreferenceCategory>
+
+<!--    <PreferenceCategory
+        android:title="2.1">
+        <PreferenceScreen
+            android:fragment="org.aprsdroid.telemetrysender.ShowPreferencesActivity$Prefs1FragmentInner"
+            android:title="2.2"
+            android:summary="2.3">
+            <extra android:name="someKey" android:value="somePrefValue" />
+        </PreferenceScreen>
+    </PreferenceCategory> -->
+</PreferenceScreen>

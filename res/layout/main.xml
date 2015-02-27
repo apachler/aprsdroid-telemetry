@@ -9,25 +9,25 @@
 		android:id="@+id/info"
 		android:layout_weight="1"
 		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="APRSdroid TelemetrySender"
+		android:layout_height="0dp"
+		android:text="@string/main_window_text"
 		/>
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Start APRSdroid"
+		android:text="@string/main_button_aprsdroid"
 		android:onClick="onStartService"
 		/>
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Send Parameters"
+		android:text="@string/main_button_send_parameters"
 		android:onClick="onSendParams"
 		/>
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="Send Values"
+		android:text="@string/main_button_send_values"
 		android:onClick="onSendValues"
 		/>
 </LinearLayout>

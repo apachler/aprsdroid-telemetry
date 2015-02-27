@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_aprsdroid-telemetrysender" default="compile.module.aprsdroid-telemetrysender">
+  <dirname property="module.aprsdroid-telemetrysender.basedir" file="${ant.file.module_aprsdroid-telemetrysender}"/>
+  
+  <property name="module.jdk.home.aprsdroid-telemetrysender" value="${jdk.home.android_api_19_platform}"/>
+  <property name="module.jdk.bin.aprsdroid-telemetrysender" value="${jdk.bin.android_api_19_platform}"/>
+  <property name="module.jdk.classpath.aprsdroid-telemetrysender" value="jdk.classpath.android_api_19_platform"/>
+  
+  <property name="compiler.args.aprsdroid-telemetrysender" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="aprsdroid-telemetrysender.output.dir" value="${module.aprsdroid-telemetrysender.basedir}/out/production/aprsdroid-telemetrysender"/>
+  <property name="aprsdroid-telemetrysender.testoutput.dir" value="${module.aprsdroid-telemetrysender.basedir}/out/test/aprsdroid-telemetrysender"/>
+  
+  <path id="aprsdroid-telemetrysender.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="aprsdroid-telemetrysender.module.production.classpath">
+    <path refid="${module.jdk.classpath.aprsdroid-telemetrysender}"/>
+  </path>
+  
+  <path id="aprsdroid-telemetrysender.runtime.production.module.classpath">
+    <pathelement location="${aprsdroid-telemetrysender.output.dir}"/>
+  </path>
+  
+  <path id="aprsdroid-telemetrysender.module.classpath">
+    <path refid="${module.jdk.classpath.aprsdroid-telemetrysender}"/>
+    <pathelement location="${aprsdroid-telemetrysender.output.dir}"/>
+  </path>
+  
+  <path id="aprsdroid-telemetrysender.runtime.module.classpath">
+    <pathelement location="${aprsdroid-telemetrysender.testoutput.dir}"/>
+    <pathelement location="${aprsdroid-telemetrysender.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.aprsdroid-telemetrysender">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.aprsdroid-telemetrysender">
+    <patternset refid="excluded.from.module.aprsdroid-telemetrysender"/>
+  </patternset>
+  
+  <path id="aprsdroid-telemetrysender.module.sourcepath">
+    <dirset dir="${module.aprsdroid-telemetrysender.basedir}">
+      <include name="src"/>
+      <include name="gen"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.aprsdroid-telemetrysender" depends="compile.module.aprsdroid-telemetrysender.production,compile.module.aprsdroid-telemetrysender.tests" description="Compile module aprsdroid-telemetrysender"/>
+  
+  <target name="compile.module.aprsdroid-telemetrysender.production" depends="register.custom.compilers" description="Compile module aprsdroid-telemetrysender; production classes">
+    <mkdir dir="${aprsdroid-telemetrysender.output.dir}"/>
+    <javac2 destdir="${aprsdroid-telemetrysender.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.aprsdroid-telemetrysender}/javac">
+      <compilerarg line="${compiler.args.aprsdroid-telemetrysender}"/>
+      <bootclasspath refid="aprsdroid-telemetrysender.module.bootclasspath"/>
+      <classpath refid="aprsdroid-telemetrysender.module.production.classpath"/>
+      <src refid="aprsdroid-telemetrysender.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.aprsdroid-telemetrysender"/>
+    </javac2>
+    
+    <copy todir="${aprsdroid-telemetrysender.output.dir}">
+      <fileset dir="${module.aprsdroid-telemetrysender.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.aprsdroid-telemetrysender.basedir}/gen">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.aprsdroid-telemetrysender.tests" depends="register.custom.compilers,compile.module.aprsdroid-telemetrysender.production" description="compile module aprsdroid-telemetrysender; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.aprsdroid-telemetrysender" description="cleanup module">
+    <delete dir="${aprsdroid-telemetrysender.output.dir}"/>
+    <delete dir="${aprsdroid-telemetrysender.testoutput.dir}"/>
+  </target>
+</project>
